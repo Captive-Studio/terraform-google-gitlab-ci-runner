@@ -2,7 +2,7 @@ locals {
   default_labels = {
     "managed-by" = "terraform"
   }
-  bucket_name  = "${var.prefix}-gitlab-runner-cache-${random_id.this.hex}"
+  bucket_name  = var.cache_bucket_name == null ? "${var.prefix}-gitlab-runner-cache-${random_id.this.hex}" : var.cache_bucket_name
   firewall_tag = "${var.prefix}-gitlab-runner"
 
   // Convert list to a string separated and prepend by a comma

@@ -310,6 +310,12 @@ variable "cache_location" {
   default     = null
 }
 
+variable "cache_bucket_name" {
+  description = "Name of the bucket. Omit if created automatically"
+  type        = string
+  default     = null
+}
+
 variable "cache_bucket_versioning" {
   description = "Boolean used to enable versioning on the cache bucket, false by default."
   type        = bool
@@ -381,7 +387,7 @@ variable "gitlab_runner_registration_config" {
 }
 
 
-variable "create_cache_bucket" {
+variable "cache_bucket_create" {
   description = "Creates a cache cloud storage bucket if true"
   default     = true
 }

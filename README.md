@@ -1,6 +1,6 @@
 # GCP GitLab Runner
 
-This [Terraform](https://www.terraform.io/) modules creates a [GitLab CI runner](https://docs.gitlab.com/runner/). 
+This [Terraform](https://www.terraform.io/) modules creates a [GitLab CI runner](https://docs.gitlab.com/runner/).
 
 The runners created by the module use preemptible instances by default for running the builds using the `docker+machine` executor.
 
@@ -9,23 +9,23 @@ The runners created by the module use preemptible instances by default for runni
 
 The runner supports:
 
-### GitLab CI docker-machine runner 
+### GitLab CI docker-machine runner
 
-In this scenario the runner agent is running on a GCP Compute Instance and runners are created by [docker machine](https://docs.gitlab.com/runner/configuration/autoscale.html) using preemptible instances. Runners will scale automatically based on the configuration. The module creates a GCS cache by default, which is shared across runners (preemptible instances). 
+In this scenario the runner agent is running on a GCP Compute Instance and runners are created by [docker machine](https://docs.gitlab.com/runner/configuration/autoscale.html) using preemptible instances. Runners will scale automatically based on the configuration. The module creates a GCS cache by default, which is shared across runners (preemptible instances).
 
 ### GitLab CI docker runner
 
-In this scenario _not_ docker machine is used but docker to schedule the builds. Builds will run on the same compute instance as the agent. 
+In this scenario _not_ docker machine is used but docker to schedule the builds. Builds will run on the same compute instance as the agent.
 
 ### GitLab CI Kubernetes Runner
 
 See [gke-runner](./modules/gke-runner)
 
-
 ## Autoscaling the Runners
-Both docker-machine runner and docker runners autoscale using GCP Custom metrics. The runner publishes running jobs metrics to stackdriver which is then used to scale up/down the number of active runners. `var.runners_min_replicas` and `var.runners_max_replicas` defined variables for the minimum and maximum number of runners respectively. It uses Google Managed Instance Group Autoscaler to scale when the average of running jobs exceeds `var.runners_concurrent`. 
 
-> :warning: With scaling up and down, runners can get terminated without waiting for clean up when GCP scales down. GCP shutdown scripts have a maximum of atmost 90 seconds, during which it's forcefully terminated. Hence, it might not wait for your jobs to finish during scale down. This can leave orphan docker-machine-created instances and failed jobs. Use this with caution. 
+Both docker-machine runner and docker runners autoscale using GCP Custom metrics. The runner publishes running jobs metrics to stackdriver which is then used to scale up/down the number of active runners. `var.runners_min_replicas` and `var.runners_max_replicas` defined variables for the minimum and maximum number of runners respectively. It uses Google Managed Instance Group Autoscaler to scale when the average of running jobs exceeds `var.runners_concurrent`.
+
+> :warning: With scaling up and down, runners can get terminated without waiting for clean up when GCP scales down. GCP shutdown scripts have a maximum of atmost 90 seconds, during which it's forcefully terminated. Hence, it might not wait for your jobs to finish during scale down. This can leave orphan docker-machine-created instances and failed jobs. Use this with caution.
 > Advisably, if you need more than one runner, set `var.runner_min_replicas` = `var.runners_max_replicas` = `number of runners you need`.
 
 ### GitLab runner token configuration
@@ -47,7 +47,6 @@ gitlab_runner_registration_config = {
 ### GitLab runner cache
 
 By default the module creates a a cache for the runner in Google Cloud Storage. Old objects are automatically removed via a configurable life cycle policy on the bucket.
-
 
 ## Usage
 
@@ -73,14 +72,11 @@ module "runner" {
 
 > NOTE: If runners are set to use internal IPs, a Cloud NAT must be deployed for runners to be able to reach internet
 
-
 ## Contributing
 
 Report issues/questions/feature requests on in the issues section.
 
 Full contributing guidelines are covered [here](CONTRIBUTING.md).
-
-
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -134,7 +130,7 @@ Full contributing guidelines are covered [here](CONTRIBUTING.md).
 | <a name="input_cache_location"></a> [cache\_location](#input\_cache\_location) | The location where to create the cache bucket in. If not specified, it defaults to the region | `any` | `null` | no |
 | <a name="input_cache_shared"></a> [cache\_shared](#input\_cache\_shared) | Enables cache sharing between runners. | `bool` | `true` | no |
 | <a name="input_cache_storage_class"></a> [cache\_storage\_class](#input\_cache\_storage\_class) | The cache storage class | `string` | `"STANDARD"` | no |
-| <a name="input_create_cache_bucket"></a> [create\_cache\_bucket](#input\_create\_cache\_bucket) | Creates a cache cloud storage bucket if true | `bool` | `true` | no |
+| <a name="input_cache_bucket_create"></a> [create\_cache\_bucket](#input\_create\_cache\_bucket) | Creates a cache cloud storage bucket if true | `bool` | `true` | no |
 | <a name="input_docker_machine_disk_size"></a> [docker\_machine\_disk\_size](#input\_docker\_machine\_disk\_size) | The disk size for the docker-machine instances. | `number` | `20` | no |
 | <a name="input_docker_machine_disk_type"></a> [docker\_machine\_disk\_type](#input\_docker\_machine\_disk\_type) | The disk Type for docker-machine instances. | `string` | `"pd-standard"` | no |
 | <a name="input_docker_machine_download_url"></a> [docker\_machine\_download\_url](#input\_docker\_machine\_download\_url) | Full url pointing to a linux x64 distribution of docker machine. | `string` | `"https://gitlab-docker-machine-downloads.s3.amazonaws.com/main/docker-machine-Linux-x86_64"` | no |
@@ -144,7 +140,7 @@ Full contributing guidelines are covered [here](CONTRIBUTING.md).
 | <a name="input_docker_machine_preemptible"></a> [docker\_machine\_preemptible](#input\_docker\_machine\_preemptible) | If true, docker-machine instances will be premptible | `bool` | `false` | no |
 | <a name="input_docker_machine_tags"></a> [docker\_machine\_tags](#input\_docker\_machine\_tags) | Additional Network tags to be attached to the docker-machine instances. | `list(string)` | `[]` | no |
 | <a name="input_docker_machine_use_internal_ip"></a> [docker\_machine\_use\_internal\_ip](#input\_docker\_machine\_use\_internal\_ip) | If true, docker-machine instances will have only internal IPs. | `bool` | `false` | no |
-| <a name="input_gitlab_runner_registration_config"></a> [gitlab\_runner\_registration\_config](#input\_gitlab\_runner\_registration\_config) | Configuration used to register the runner. Available at https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner. | `map` | <pre>{<br>  "access_level": "not_protected",<br>  "description": "",<br>  "locked_to_project": "",<br>  "maximum_timeout": "",<br>  "registration_token": "",<br>  "run_untagged": "",<br>  "tag_list": ""<br>}</pre> | no |
+| <a name="input_gitlab_runner_registration_config"></a> [gitlab\_runner\_registration\_config](#input\_gitlab\_runner\_registration\_config) | Configuration used to register the runner. Available at <https://docs.gitlab.com/ee/api/runners.html#register-a-new-runner>. | `map` | <pre>{<br>  "access_level": "not_protected",<br>  "description": "",<br>  "locked_to_project": "",<br>  "maximum_timeout": "",<br>  "registration_token": "",<br>  "run_untagged": "",<br>  "tag_list": ""<br>}</pre> | no |
 | <a name="input_gitlab_runner_version"></a> [gitlab\_runner\_version](#input\_gitlab\_runner\_version) | Version of the GitLab runner. Defaults to latest | `string` | `""` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Map of labels that will be added to created resources | `map(string)` | `{}` | no |
 | <a name="input_network"></a> [network](#input\_network) | The target VPC for the docker-machine and runner instances. | `string` | `"default"` | no |
@@ -169,7 +165,7 @@ Full contributing guidelines are covered [here](CONTRIBUTING.md).
 | <a name="input_runners_image"></a> [runners\_image](#input\_runners\_image) | Image to run builds, will be used in the runner config.toml | `string` | `"docker:19.03"` | no |
 | <a name="input_runners_install_docker_credential_gcr"></a> [runners\_install\_docker\_credential\_gcr](#input\_runners\_install\_docker\_credential\_gcr) | Install docker\_credential\_gcr inside `startup_script_pre_install` script | `bool` | `true` | no |
 | <a name="input_runners_limit"></a> [runners\_limit](#input\_runners\_limit) | Limit for the runners, will be used in the runner config.toml. | `number` | `0` | no |
-| <a name="input_runners_machine_autoscaling"></a> [runners\_machine\_autoscaling](#input\_runners\_machine\_autoscaling) | (docker-machine) Set autoscaling parameters based on periods, see https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section | <pre>list(object({<br>    periods    = list(string)<br>    idle_count = number<br>    idle_time  = number<br>    timezone   = string<br>  }))</pre> | `[]` | no |
+| <a name="input_runners_machine_autoscaling"></a> [runners\_machine\_autoscaling](#input\_runners\_machine\_autoscaling) | (docker-machine) Set autoscaling parameters based on periods, see <https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersmachine-section> | <pre>list(object({<br>    periods    = list(string)<br>    idle_count = number<br>    idle_time  = number<br>    timezone   = string<br>  }))</pre> | `[]` | no |
 | <a name="input_runners_machine_type"></a> [runners\_machine\_type](#input\_runners\_machine\_type) | Instance type used for the GitLab runner. | `string` | `"n1-standard-1"` | no |
 | <a name="input_runners_max_builds"></a> [runners\_max\_builds](#input\_runners\_max\_builds) | (docker-machine) Max builds for each runner after which it will be removed, will be used in the runner config.toml. By default set to 0, no maxBuilds will be set in the configuration. | `number` | `0` | no |
 | <a name="input_runners_max_growth_rate"></a> [runners\_max\_growth\_rate](#input\_runners\_max\_growth\_rate) | (docker-machine) The maximum number of machines that can be added to the runner in parallel. Default is 0 (no limit). | `number` | `0` | no |
