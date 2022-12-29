@@ -80,7 +80,7 @@ module "cache" {
   bucket_versioning            = var.cache_bucket_versioning
   bucket_expiration_days       = var.cache_expiration_days
   prefix                       = var.prefix
-  runner_service_account_email = local.cache_service_account_email
+  runner_service_account_email = [local.cache_service_account_email]
 }
 
 

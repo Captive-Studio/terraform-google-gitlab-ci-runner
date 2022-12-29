@@ -40,6 +40,6 @@ variable "prefix" {
 }
 
 variable "runner_service_account_email" {
-  description = "the email of the service account to access to the cache bucket "
-  type        = string
+  description = "A list of email of the service account to access to the cache bucket "
+  type        = list(string)
 }

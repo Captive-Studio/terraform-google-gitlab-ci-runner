@@ -3,6 +3,7 @@
 Setup a GCS bucket as cache for gitlab runner
 
 ## Usage
+
 ```
 module "cache" {
   source                  = "DeimosCloud/gitlab-ci-runner/google/modules/cache"
@@ -17,8 +18,6 @@ module "cache" {
 }
 
 ```
-
-
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -59,7 +58,7 @@ No modules.
 | <a name="input_bucket_storage_class"></a> [bucket\_storage\_class](#input\_bucket\_storage\_class) | The cache storage class | `string` | `"STANDARD"` | no |
 | <a name="input_bucket_versioning"></a> [bucket\_versioning](#input\_bucket\_versioning) | Boolean used to enable versioning on the cache bucket, false by default. | `bool` | `false` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | string to prepend to the cache bucket | `string` | `"gitlab-runner"` | no |
-| <a name="input_runner_service_account_email"></a> [runner\_service\_account\_email](#input\_runner\_service\_account\_email) | the email of the service account to access to the cache bucket | `string` | n/a | yes |
+| <a name="input_runner_service_account_email"></a> [runner\_service\_account\_email](#input\_runner\_service\_account\_email) | the email of the service account to access to the cache bucket | `list(string)` | n/a | yes |
 
 ## Outputs
 
