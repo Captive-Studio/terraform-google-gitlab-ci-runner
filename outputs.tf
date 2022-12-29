@@ -4,7 +4,7 @@ output "service_account_agent" {
 }
 
 output "service_account_runner" {
-  value       = service_account_runner.runner
+  value       = google_service_account.runner
   description = "Runner Service account"
 }
 
