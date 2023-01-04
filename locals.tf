@@ -5,12 +5,6 @@ locals {
   bucket_name  = var.cache_bucket_name == null ? "${var.prefix}-gitlab-runner-cache-${random_id.this.hex}" : var.cache_bucket_name
   firewall_tag = "${var.prefix}-gitlab-runner"
 
-  // Convert list to a string separated and prepend by a comma
-  docker_machine_options_string = format(
-    ",%s",
-    join(",", formatlist("%q", var.docker_machine_options)),
-  )
-
   runners_tls_verify = var.runners_tls_verify
   runners_machine_autoscaling = templatefile("${path.module}/templates/runners-machine-autoscaling.tpl", {
     runners_machine_autoscaling = var.runners_machine_autoscaling
@@ -22,8 +16,6 @@ locals {
   }, local.default_labels, var.labels)
 
   agent_machine_labels = join(",", [for key, value in merge({ "managed-by" = "gitlab-runner", "runner-executor" : "docker-machine" }, var.labels) : "${key}:${value}"])
-
-  runners_max_builds_string = var.runners_max_builds == 0 ? "" : format("MaxBuilds = %d", var.runners_max_builds)
 
   runners_additional_volumes = <<-EOT
   %{~for volume in var.runners_additional_volumes~}, "${volume}"%{endfor~}
@@ -72,20 +64,23 @@ locals {
   collectd_exporter = file("${path.module}/templates/collectd-gitlab-exporter.sh")
   template_runner_config = templatefile("${path.module}/templates/runner-config.toml.tpl",
     {
-      gitlab_url                     = var.runners_gitlab_url
-      runners_project                = var.project
-      runners_network                = var.network
-      runners_subnetwork             = var.subnetwork
-      runners_gcp_project            = var.project
-      runners_gcp_region             = var.region
-      runners_gcp_zone               = random_shuffle.zones.result[0]
-      runners_machine_type           = var.runners_machine_type
-      runners_disk_type              = var.runners_disk_type
-      runners_disk_size              = var.runners_disk_size
-      runners_tags                   = join(",", distinct(concat([local.firewall_tag], var.runners_tags)))
-      runners_labels                 = local.agent_machine_labels
-      runners_use_internal_ip        = var.runners_use_internal_ip
-      docker_machine_options         = length(var.docker_machine_options) == 0 ? "" : local.docker_machine_options_string
+      gitlab_url              = var.runners_gitlab_url
+      runners_project         = var.project
+      runners_network         = var.network
+      runners_subnetwork      = var.subnetwork
+      runners_gcp_project     = var.project
+      runners_gcp_region      = var.region
+      runners_gcp_zone        = random_shuffle.zones.result[0]
+      runners_machine_type    = var.runners_machine_type
+      runners_disk_type       = var.runners_disk_type
+      runners_disk_size       = var.runners_disk_size
+      runners_tags            = join(",", distinct(concat([local.firewall_tag], var.runners_tags)))
+      runners_labels          = local.agent_machine_labels
+      runners_use_internal_ip = var.runners_use_internal_ip
+      docker_machine_options = length(var.docker_machine_options) == 0 ? "" : format(
+        ",%s",
+        join(",", formatlist("%q", var.docker_machine_options)),
+      )
       runners_service_account        = google_service_account.agent.email
       runners_tls_verify             = local.runners_tls_verify
       runners_additional_volumes     = local.runners_additional_volumes
@@ -104,7 +99,7 @@ locals {
       runners_idle_count             = var.runners_idle_count
       runners_idle_time              = var.runners_idle_time
       runners_max_growth_rate        = var.runners_max_growth_rate
-      runners_max_builds             = local.runners_max_builds_string
+      runners_max_builds             = var.runners_max_builds == 0 ? "" : format("MaxBuilds = %d", var.runners_max_builds)
       runners_machine_autoscaling    = local.runners_machine_autoscaling
       runners_environment_vars       = jsonencode(var.runners_environment_vars)
       runners_pre_build_script       = var.runners_pre_build_script
