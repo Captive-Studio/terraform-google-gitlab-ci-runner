@@ -31,7 +31,7 @@ resource "google_storage_bucket" "cache" {
       type = "Delete"
     }
   }
-  labels = var.bucket_labels
+  labels = local.bucket_labels
 }
 
 #----------------------------------------------------------------
@@ -40,7 +40,7 @@ resource "google_storage_bucket" "cache" {
 
 resource "google_storage_bucket_iam_member" "cache-member" {
   for_each = toset(var.runner_service_account_email)
-  bucket = google_storage_bucket.cache.name
-  role   = "roles/storage.admin"
-  member = "serviceAccount:${each.value}"
+  bucket   = google_storage_bucket.cache.name
+  role     = "roles/storage.admin"
+  member   = "serviceAccount:${each.value}"
 }
