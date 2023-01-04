@@ -11,6 +11,7 @@ locals {
     join(",", formatlist("%q", var.docker_machine_options)),
   )
 
+  runners_tls_verify = var.runners_tls_verify
   runners_machine_autoscaling = templatefile("${path.module}/templates/runners-machine-autoscaling.tpl", {
     runners_machine_autoscaling = var.runners_machine_autoscaling
     }
@@ -86,6 +87,7 @@ locals {
       runners_use_internal_ip        = var.runners_use_internal_ip
       docker_machine_options         = length(var.docker_machine_options) == 0 ? "" : local.docker_machine_options_string
       runners_service_account        = google_service_account.agent.email
+      runners_tls_verify             = local.runners_tls_verify
       runners_additional_volumes     = local.runners_additional_volumes
       runners_docker_machine_image   = var.runner_machine_image
       runners_name                   = var.runners_name

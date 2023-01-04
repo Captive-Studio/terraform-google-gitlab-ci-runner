@@ -15,11 +15,11 @@ listen_address = "127.0.0.1:9252"
   output_limit = ${runners_output_limit}
   limit = ${runners_limit}
   [runners.docker]
-    tls_verify = false
+    tls_verify = ${runners_tls_verify}
     image = "${runners_image}"
     privileged = ${runners_privileged}
     disable_cache = ${runners_disable_cache}
-    volumes = ["/cache" ${runners_additional_volumes}]
+    volumes = ["/cache", "/certs/client" ${runners_additional_volumes}]
     shm_size = ${runners_shm_size}
     pull_policy = "${runners_pull_policy}"
     runtime = "${runners_docker_runtime}"
