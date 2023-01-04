@@ -78,7 +78,7 @@ locals {
       runners_labels          = local.agent_machine_labels
       runners_use_internal_ip = var.runners_use_internal_ip
       docker_machine_options = length(var.docker_machine_options) == 0 ? "" : format(
-        ",%s",
+        "%s,",
         join(",", formatlist("%q", var.docker_machine_options)),
       )
       runners_service_account        = google_service_account.agent.email
