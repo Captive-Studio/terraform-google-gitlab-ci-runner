@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+      "EditorConfig.EditorConfig",
+      "hashicorp.terraform",
+      "ms-vscode.makefile-tools",
+      "fabiospampinato.vscode-todo-plus"
+    ]
+}
