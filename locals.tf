@@ -6,10 +6,6 @@ locals {
   firewall_tag = "${var.prefix}-gitlab-runner"
 
   runners_tls_verify = var.runners_tls_verify
-  runners_machine_autoscaling = templatefile("${path.module}/templates/runners-machine-autoscaling.tpl", {
-    runners_machine_autoscaling = var.runners_machine_autoscaling
-    }
-  )
 
   runners_labels = merge({
     "role" = "gitlab-runner"
@@ -81,26 +77,29 @@ locals {
         "%s,",
         join(",", formatlist("%q", var.docker_machine_options)),
       )
-      runners_service_account        = google_service_account.agent.email
-      runners_tls_verify             = local.runners_tls_verify
-      runners_additional_volumes     = local.runners_additional_volumes
-      runners_docker_machine_image   = var.runner_machine_image
-      runners_name                   = var.runners_name
-      runners_executor               = var.runners_executor
-      runners_limit                  = var.runners_limit
-      runners_concurrent             = var.runners_concurrent
-      runners_image                  = var.runners_image
-      runners_privileged             = var.runners_privileged
-      runners_disable_cache          = var.runners_disable_cache
-      runners_docker_runtime         = var.runners_docker_runtime
-      runners_helper_image           = var.runners_helper_image
-      runners_shm_size               = var.runners_shm_size
-      runners_pull_policy            = var.runners_pull_policy
-      runners_idle_count             = var.runners_idle_count
-      runners_idle_time              = var.runners_idle_time
-      runners_max_growth_rate        = var.runners_max_growth_rate
-      runners_max_builds             = var.runners_max_builds == 0 ? "" : format("MaxBuilds = %d", var.runners_max_builds)
-      runners_machine_autoscaling    = local.runners_machine_autoscaling
+      runners_service_account      = google_service_account.agent.email
+      runners_tls_verify           = local.runners_tls_verify
+      runners_additional_volumes   = local.runners_additional_volumes
+      runners_docker_machine_image = var.runner_machine_image
+      runners_name                 = var.runners_name
+      runners_executor             = var.runners_executor
+      runners_limit                = var.runners_limit
+      runners_concurrent           = var.runners_concurrent
+      runners_image                = var.runners_image
+      runners_privileged           = var.runners_privileged
+      runners_disable_cache        = var.runners_disable_cache
+      runners_docker_runtime       = var.runners_docker_runtime
+      runners_helper_image         = var.runners_helper_image
+      runners_shm_size             = var.runners_shm_size
+      runners_pull_policy          = var.runners_pull_policy
+      runners_idle_count           = var.runners_idle_count
+      runners_idle_time            = var.runners_idle_time
+      runners_max_growth_rate      = var.runners_max_growth_rate
+      runners_max_builds           = var.runners_max_builds == 0 ? "" : format("MaxBuilds = %d", var.runners_max_builds)
+      runners_machine_autoscaling = templatefile("${path.module}/templates/runners-machine-autoscaling.tpl", {
+        runners_machine_autoscaling = var.runners_machine_autoscaling
+        }
+      )
       runners_environment_vars       = jsonencode(var.runners_environment_vars)
       runners_pre_build_script       = var.runners_pre_build_script
       runners_post_build_script      = var.runners_post_build_script
