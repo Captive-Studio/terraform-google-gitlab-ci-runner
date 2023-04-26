@@ -43,4 +43,8 @@ resource "google_storage_bucket_iam_member" "cache-member" {
   bucket   = google_storage_bucket.cache.name
   role     = "roles/storage.admin"
   member   = "serviceAccount:${each.value}"
+
+  depends_on = [
+    var.service_account_agent
+  ]
 }
