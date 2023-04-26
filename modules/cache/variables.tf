@@ -43,3 +43,8 @@ variable "runner_service_account_email" {
   description = "A list of email of the service account to access to the cache bucket "
   type        = list(string)
 }
+
+variable "runner_service_account" {
+  description = "Service account used as agent. Typically the result of `resource google_service_account`"
+  type        = object({ email = string })
+}
