@@ -42,6 +42,7 @@ variable "prefix" {
 variable "service_account_agent_email" {
   description = "A list of email of the service account to access to the cache bucket "
   type        = list(string)
+  default     = []
 }
 
 variable "service_account_agent" {
