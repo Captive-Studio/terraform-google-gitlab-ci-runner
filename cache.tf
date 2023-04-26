@@ -5,5 +5,5 @@ module "cache_gcs" {
   bucket_location              = var.cache_location != null ? var.cache_location : var.region
   bucket_labels                = local.runners_labels
   prefix                       = var.prefix
-  runner_service_account_email = [google_service_account.agent.email]
+  runner_service_account_email = [var.service_account_agent.email]
 }

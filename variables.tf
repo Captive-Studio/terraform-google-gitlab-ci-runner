@@ -31,6 +31,11 @@ variable "subnetwork" {
   default     = ""
 }
 
+variable "service_account_agent" {
+  description = "Service account used as agent. Typically the result of `resource google_service_account`"
+  type        = object({ name = string, email = string })
+}
+
 variable "runners_machine_type" {
   description = "Instance type used for the GitLab runner."
   type        = string

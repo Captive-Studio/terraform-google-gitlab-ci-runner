@@ -40,7 +40,7 @@ locals {
       runners_executor                      = var.runners_executor
       runners_install_docker_credential_gcr = var.runners_install_docker_credential_gcr
       runners_gitlab_url                    = var.runners_gitlab_url
-      runners_service_account               = google_service_account.agent.email
+      runners_service_account               = var.service_account_agent.email
       runners_service_account_json          = base64decode(google_service_account_key.agent.private_key)
       runners_tags                          = join(",", distinct(concat([local.firewall_tag], var.runners_tags)))
       runners_enable_monitoring             = var.runners_enable_monitoring
@@ -77,7 +77,7 @@ locals {
         "%s,",
         join(",", formatlist("%q", var.docker_machine_options)),
       )
-      runners_service_account      = google_service_account.agent.email
+      runners_service_account      = var.service_account_agent.email
       runners_tls_verify           = local.runners_tls_verify
       runners_additional_volumes   = local.runners_additional_volumes
       runners_docker_machine_image = var.runner_machine_image
