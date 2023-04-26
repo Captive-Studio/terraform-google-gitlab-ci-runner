@@ -39,10 +39,9 @@ resource "google_storage_bucket" "cache" {
 #----------------------------------------------------------------
 
 resource "google_storage_bucket_iam_member" "cache-member" {
-  for_each = toset(concat(var.service_account_agent_email, [var.service_account_agent.email]))
-  bucket   = google_storage_bucket.cache.name
-  role     = "roles/storage.admin"
-  member   = "serviceAccount:${each.value}"
+  bucket = google_storage_bucket.cache.name
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${var.service_account_agent.email}"
 
   depends_on = [
     var.service_account_agent
