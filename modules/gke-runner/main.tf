@@ -73,14 +73,14 @@ resource "google_service_account" "cache_admin" {
 #-----------------------------------------------------------
 
 module "cache" {
-  source                      = "../cache"
-  bucket_location             = local.cache_location
-  bucket_labels               = var.cache_labels
-  bucket_storage_class        = var.cache_storage_class
-  bucket_versioning           = var.cache_bucket_versioning
-  bucket_expiration_days      = var.cache_expiration_days
-  prefix                      = var.prefix
-  service_account_agent_email = [local.cache_service_account_email]
+  source                 = "../cache"
+  bucket_location        = local.cache_location
+  bucket_labels          = var.cache_labels
+  bucket_storage_class   = var.cache_storage_class
+  bucket_versioning      = var.cache_bucket_versioning
+  bucket_expiration_days = var.cache_expiration_days
+  prefix                 = var.prefix
+  service_account_agent  = local.cache_service_account
 }
 
 
@@ -89,7 +89,7 @@ module "cache" {
 #--------------------------------------------------------
 
 resource "google_service_account_key" "cache_admin" {
-  service_account_id = local.cache_service_account_name
+  service_account_id = local.cache_service_account.name
 }
 
 
