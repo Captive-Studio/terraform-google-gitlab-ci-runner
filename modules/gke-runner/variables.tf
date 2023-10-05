@@ -283,6 +283,11 @@ variable "build_job_node_tolerations" {
   }
 }
 
+variable "manager_node_tolerations" {
+  description = "A map of node tolerations to apply to the pods as defined https://docs.gitlab.com/runner/executors/kubernetes.html#other-configtoml-settings"
+  default     = {}
+}
+
 variable "manager_pod_annotations" {
   description = "A map of annotations to be added to each build pod created by the Runner. The value of these can include environment variables for expansion. Pod annotations can be overwritten in each build. "
   default     = {}
